@@ -8,6 +8,7 @@
 
 #include "led.h"
 #include "button.h"
+#include "uart.h"
 // __init_hardware is called by the Freescale __thumb_startup function (see 
 // vectors.c)
 void __init_hardware()
@@ -25,12 +26,17 @@ void __init_hardware()
 
 	led_init();
 	btn_init();
+	uart_init();
+	uart_rx_set_enable_flag(1);
+	uart_tx_set_enable_flag(1);
 
 }
 
 void main()
 {
 	int timer;
+	unsigned int count = 1;
+	char buffer[1];
 	led_on(LED_BLUE);
 	led_off(LED_YELLOW);
 	led_off(LED_GREEN);
@@ -44,10 +50,8 @@ void main()
 			timer = 1;
 			led_off(LED_RED);
 		}
-//		timer = 10000000;
-//		while(timer--) {
-//			led_toggle(LED_RED);
-//			led_toggle(LED_BLUE);
+		uart_read(buffer, count);
+		uart_write(buffer, count);
 //		}
 	}
 }

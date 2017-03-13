@@ -2,6 +2,7 @@
 
 #include "vectors.h"
 #include "MK70F12.h"
+#include "uart.h"
 
 // __thumb_startup is provided by the Freescale C library
 //
@@ -111,7 +112,7 @@ volatile __declspec(vectortable) vt_with_sp_t __vect_table = {
 		default_isr,     // 0x3A CAN1
 		default_isr,     // 0x3B Reserved
 		default_isr,     // 0x3C Reserved
-		default_isr,     // 0x3D UART0_RX_TX
+		uart0_rx_tx_handler,     // 0x3D UART0_RX_TX
 		default_isr,     // 0x3E UART0_ERR
 		default_isr,     // 0x3F UART1_RX_TX
 		default_isr,     // 0x40 UART1_ERR 
