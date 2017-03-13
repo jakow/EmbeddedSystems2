@@ -29,6 +29,8 @@ void __init_hardware()
 	uart_init();
 	uart_rx_set_enable_flag(1);
 	uart_tx_set_enable_flag(1);
+	//init FPU 
+	SCB_CPACR |= SCB_CPACR_CP10_MASK | SCB_CPACR_CP11_MASK;
 
 }
 
@@ -37,9 +39,12 @@ void main()
 	int timer;
 	unsigned int count = 1;
 	char buffer[1];
+	float pi = 3.14159; 
+	float alsopi = 3.14159;
 	led_on(LED_BLUE);
 	led_off(LED_YELLOW);
 	led_off(LED_GREEN);
+	
 	while(1)
 	{
 		if (btn_get(BTN0) == BTN_DOWN) {
@@ -52,7 +57,7 @@ void main()
 		}
 		uart_read(buffer, count);
 		uart_write(buffer, count);
-//		}
+
 	}
 }
 
