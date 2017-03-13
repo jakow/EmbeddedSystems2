@@ -22,9 +22,9 @@ void btn_init() {
 	PORTE_PCR26 = IS_GPIO; //  | IRQC_BOTH_EDGES;
 
 	// set direction
-	// clear button 0 flag to set as output
+	// clear button 0 flag to set as input
 	GPIOD_PDDR &= ~BIT_BTN0;
-	// clear button 0 flag to set as output
+	// clear button 0 flag to set as input
 	GPIOE_PDDR &= ~BIT_BTN1;
 	// set default input values
 
