@@ -25,15 +25,20 @@ void __init_hardware()
 
 	led_init();
 	btn_init();
+	//init FPU 
+	SCB_CPACR |= SCB_CPACR_CP10_MASK | SCB_CPACR_CP11_MASK;
 
 }
 
 void main()
 {
 	int timer;
+	float pi = 3.14159; 
+	float alsopi = 3.14159;
 	led_on(LED_BLUE);
 	led_off(LED_YELLOW);
 	led_off(LED_GREEN);
+	
 	while(1)
 	{
 		if (btn_get(BTN0) == BTN_DOWN) {
@@ -44,11 +49,6 @@ void main()
 			timer = 1;
 			led_off(LED_RED);
 		}
-//		timer = 10000000;
-//		while(timer--) {
-//			led_toggle(LED_RED);
-//			led_toggle(LED_BLUE);
-//		}
 	}
 }
 
