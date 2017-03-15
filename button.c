@@ -30,8 +30,8 @@ void btn_init() {
 
 }
 
-int btn_get(int button_id) {
-	switch (button_id) {
+int btn_get(int btn_id) {
+	switch (btn_id) {
 	case BTN0:
 		return (GPIOD_PDIR & BIT_BTN0) == 0;
 	case BTN1:
@@ -39,5 +39,23 @@ int btn_get(int button_id) {
 	default:
 		return 0;
 
+	}
+}
+
+static int btn_state[2];
+btn_state[0] = 0; 
+btn_state[1] = 0; 
+//state 0: has not been pressed
+//state 1: has been pressed 
+//returns 1 on falling edge (after pressed and released)
+int btn_single_pulse(int btn_id) {
+	if (!btn_get(btn_id) && btn_state[btn_id]){
+		btn_state[btn_id] = 0; 
+		return 1; 
+	} else if (btn_get(btn_id)) {
+		btn_state[btn_id] = 1; 
+		return 0; 
+	} else {
+		return 0; 
 	}
 }

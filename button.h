@@ -20,5 +20,6 @@
 
 extern void btn_init();
 extern int btn_get(int btn_id);
+extern int btn_single_pulse(int btn_id);
 
 #endif /* SRC_BUTTON_H_ */
