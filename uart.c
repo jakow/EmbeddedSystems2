@@ -9,7 +9,7 @@
 
 
 uart_init(uint32_t clk_hz, uint32_t baud) {
-	uint16_t baud_div, baud_rate_frac_dly;
+	uint16_t sbr, brfa;
 	uint8_t temp_reg;
 	// Enable clock for PORTF where the UART0 pins sit
 	SIM_SCGC5 |= SIM_SCGC5_PORTF_MASK;
@@ -34,21 +34,20 @@ uart_init(uint32_t clk_hz, uint32_t baud) {
     UART_C1_REG(UART0_BASE_PTR) = 0;
 
     //
-    baud_div = (uint16_t)((clk_hz)/(baud * 16));
+    sbr = (uint16_t)((clk_hz)/(baud * 16));
     // save previous value of BDH_REG with the SBR value cleared
     temp_reg = UART_BDH_REG(UART0_BASE_PTR) & ~(UART_BDH_SBR(0x1F));
-    UART_BDL_REG(UART0_BASE_PTR) = UART_BDL_SBR(baud_div);
-    UART_BDH_REG(UART0_BASE_PTR) = temp_reg | UART_BDH_SBR(baud_div);
-    baud_rate_frac_dly = 0;
-
+    UART_BDL_REG(UART0_BASE_PTR) = UART_BDL_SBR(sbr);
+    UART_BDH_REG(UART0_BASE_PTR) = temp_reg | UART_BDH_SBR(sbr);
+    // calculate the fraction from: baud_rate = Fclk/(16*(SBR+BRFA/32))
+    brfa = (uint16_t) (2*(clk_hz-16*sbr*baud)/sbr);
     // save previous value of C4 with BRFA cleared
     temp_reg = (UART_C4_REG(UART0_BASE_PTR) & ~UART_C4_BRFA(0x1F));
-    UART_C4_REG(UART0_BASE_PTR) = temp_reg |  UART_C4_BRFA(baud_rate_frac_dly);
+    UART_C4_REG(UART0_BASE_PTR) = temp_reg |  UART_C4_BRFA(brfa);
 
 }
 
 
-//Is MUXing the same thing as masking certain bits....?
 
 // toggle the correct uart0_C2 register bit
 void uart_rx_set_enable_flag(uint8_t enable) {
