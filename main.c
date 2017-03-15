@@ -37,7 +37,7 @@ void __init_hardware()
 void main()
 {
 	int timer;
-	unsigned int count = 1;
+	// unsigned int count = 1;
 	char buffer[1];
 	float pi = 3.14159; 
 	float alsopi = 3.14159;
@@ -55,8 +55,8 @@ void main()
 			timer = 1;
 			led_off(LED_RED);
 		}
-		uart_read(buffer, count);
-		uart_write(buffer, count);
+		uart_read(buffer);
+		uart_write(buffer);
 
 	}
 }

@@ -12,6 +12,9 @@ void uart_init() {
 	SIM_SCGC4 |= UART0_CLK_ENABLE;
 }
 
+
+//Is MUXing the same thing as masking certain bits....?
+
 // toggle the correct uart0_C2 register bit
 void uart_rx_set_enable_flag(int enable) {
 	if (enable)
@@ -27,6 +30,8 @@ void uart_tx_set_enable_flag(int enable) {
 		UART0_C2 &= ~TX_ENABLE_BIT;
 }
 
+
+//but num_uart_handlers == 0??? 
 void uart0_rx_tx_handler() {
 	int i;
 	// call each uart handler
@@ -35,12 +40,22 @@ void uart0_rx_tx_handler() {
 	}
 }
 
-void uart_read(char *buffer, unsigned int count) {
-	// TODO: your task, Joel ;)
+//Also which UART port are we using? Or is it arbitrary? 
+
+char* uart_read() {
+	return UART0_D; 
 }
 
-void uart_write(char *buffer, unsigned int count) {
-	// TODO: as above
+void uart_write(char *buffer) {
+	UART0_D = *buffer;
+}
+
+
+//UART baud rate = UART module clock / (16 × (SBR[12:0] + BRFD))
+//50*10^6 / 115200 /60 = 27 approximately
+void uart_set_baud_rate(int rate) {
+	//UART0_BDH = 0;
+	UART0_BDL = 27;
 }
 
 
