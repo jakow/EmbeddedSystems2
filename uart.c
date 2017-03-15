@@ -44,6 +44,8 @@ uart_init(uint32_t clk_hz, uint32_t baud) {
     // save previous value of C4 with BRFA cleared
     temp_reg = (UART_C4_REG(UART0_BASE_PTR) & ~UART_C4_BRFA(0x1F));
     UART_C4_REG(UART0_BASE_PTR) = temp_reg |  UART_C4_BRFA(brfa);
+    // enable receiver and transmitter
+    UART_C2_REG(UART0_BASE_PTR) |= UART_C2_TE_MASK | UART_C2_RE_MASK;
 
 }
 
