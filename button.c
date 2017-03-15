@@ -11,6 +11,8 @@
 #define IS_GPIO  (PORT_PCR_MUX(1) | PORT_PCR_DSE_MASK | PORT_PCR_PE_MASK | PORT_PCR_PS_MASK)
 #define IRQC_BOTH_EDGES (11 << PORT_PCR_IRQC_SHIFT)
 
+static int btn_state[2];
+
 void btn_init() {
 	// enable gates on the ports
 	SIM_SCGC5 |=
@@ -27,7 +29,8 @@ void btn_init() {
 	// clear button 0 flag to set as input
 	GPIOE_PDDR &= ~BIT_BTN1;
 	// set default input values
-
+	btn_state[0] = 0;
+	btn_state[1] = 0;
 }
 
 int btn_get(int btn_id) {
@@ -42,20 +45,18 @@ int btn_get(int btn_id) {
 	}
 }
 
-static int btn_state[2];
-btn_state[0] = 0; 
-btn_state[1] = 0; 
+
 //state 0: has not been pressed
-//state 1: has been pressed 
+//state 1: has been pressed
 //returns 1 on falling edge (after pressed and released)
 int btn_single_pulse(int btn_id) {
 	if (!btn_get(btn_id) && btn_state[btn_id]){
-		btn_state[btn_id] = 0; 
-		return 1; 
+		btn_state[btn_id] = 0;
+		return 1;
 	} else if (btn_get(btn_id)) {
-		btn_state[btn_id] = 1; 
-		return 0; 
+		btn_state[btn_id] = 1;
+		return 0;
 	} else {
-		return 0; 
+		return 0;
 	}
 }

@@ -18,9 +18,9 @@ void uart_init(uint32_t clk_hz, uint32_t baud) {
 	// set correct pin muxing
 	//enable UART0_RX on pin PTF18
 	//(see page 275 of Tower manual for the pin alternatives )
-	PORTE_PCR16 = PORT_PCR_MUX(4); // UART is ALT4 function for this pin
+	PORTE_PCR16 = PORT_PCR_MUX(3); // UART2 is ALT3 function for this pin
    	// Enable UART0_RX function on PTF17
-	PORTE_PCR17 = PORT_PCR_MUX(4); // UART is ALT4 function for this pin
+	PORTE_PCR17 = PORT_PCR_MUX(3); // UART is ALT3 function for this pin
 
 	// disable receiver and transmitter when setting options
     UART_C2_REG(UART2_BASE_PTR) &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
