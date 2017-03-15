@@ -9,6 +9,7 @@
 #include "led.h"
 #include "button.h"
 #include "uart.h"
+#include "fpu.h"
 
 #define FCLK 50000000
 #define BAUD 115200
@@ -30,9 +31,7 @@ void __init_hardware()
 	led_init();
 	btn_init();
 	uart_init(FCLK, BAUD);
-	//init FPU - coprocessor enable flags
-	SCB_CPACR |= SCB_CPACR_CP10_MASK | SCB_CPACR_CP11_MASK;
-
+	fpu_init();
 }
 
 void main()
