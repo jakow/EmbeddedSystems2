@@ -9,6 +9,7 @@
 #define UART_H_
 
 #include "MK70F12.h"
+#include "k70_bool.h"
 
 #define TX_ENABLE_BIT (1 << 3)
 #define RX_ENABLE_BIT (1 << 2)
@@ -16,19 +17,15 @@
 #define TX_INT_ENABLE_BIT (1 << 7)
 #define TX_INT_COMPL_ENABLE_BIT (1 << 6)
 
-static void (*uart_handlers[4]) (void);
-static int num_uart_handlers = 0;
-extern void uart0_rx_tx_handler();
 
 extern void uart_init(uint32_t clk_khz, uint32_t baud);
 
+extern bool uart_getchar(char* ch);
 
-extern void uart_rx_set_enable_flag(uint8_t enable);
+extern void uart_putchar(char* ch);
 
-extern void uart_tx_set_enable_flag(uint8_t enable);
+extern void uart_read(char* buffer, unsigned int count);
 
-extern char* uart_read();
-
-extern void uart_write(char* buffer); 
+extern void uart_write(char* buffer, unsigned int count);
 
 #endif /* UART_H_ */

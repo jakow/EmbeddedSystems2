@@ -9,6 +9,9 @@
 #include "led.h"
 #include "button.h"
 #include "uart.h"
+
+#define FCLK 5000000
+#define BAUD 115200
 // __init_hardware is called by the Freescale __thumb_startup function (see 
 // vectors.c)
 void __init_hardware()
@@ -26,10 +29,8 @@ void __init_hardware()
 
 	led_init();
 	btn_init();
-	uart_init();
-	uart_rx_set_enable_flag(1);
-	uart_tx_set_enable_flag(1);
-	//init FPU 
+	uart_init(FCLK, BAUD);
+	//init FPU - coprocessor enable flags
 	SCB_CPACR |= SCB_CPACR_CP10_MASK | SCB_CPACR_CP11_MASK;
 
 }
@@ -55,9 +56,11 @@ void main()
 			timer = 1;
 			led_off(LED_RED);
 		}
-		uart_read(buffer);
-		uart_write(buffer);
-
+		// echo
+		if (uart_getchar(buffer)) {
+			uart_putchar(buffer);
+		}
+		uart_write("test", 4);
 	}
 }
 

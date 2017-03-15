@@ -6,9 +6,9 @@
  */
 #include "uart.h"
 #include "MK70F12.h"
+#include "k70_bool.h"
 
-
-uart_init(uint32_t clk_hz, uint32_t baud) {
+void uart_init(uint32_t clk_hz, uint32_t baud) {
 	uint16_t sbr, brfa;
 	uint8_t temp_reg;
 	// Enable clock for PORTF where the UART0 pins sit
@@ -51,47 +51,45 @@ uart_init(uint32_t clk_hz, uint32_t baud) {
 
 
 
-// toggle the correct uart0_C2 register bit
-void uart_rx_set_enable_flag(uint8_t enable) {
-	if (enable)
-		UART0_C2 |= RX_ENABLE_BIT;
-	else
-		UART0_C2 &= ~RX_ENABLE_BIT;
+/**
+ * uart_getchar
+ * get a character into the buffer if present
+ * returns 1 if there was a character present
+ * returs 0 if there was no character to be read
+ */
+
+bool uart_getchar(char* ch) {
+	bool char_present;
+	// check if there is a character to be read
+	char_present = (UART_S1_REG(UART0_BASE_PTR) & UART_S1_RDRF_MASK) != 0;
+	if (char_present) {
+		// get data
+		*ch = (char) UART_D_REG(UART0_BASE_PTR);
+	}
+	return char_present;
 }
 
-void uart_tx_set_enable_flag(uint8_t enable) {
-	if (enable)
-		UART0_C2 |= TX_ENABLE_BIT;
-	else
-		UART0_C2 &= ~TX_ENABLE_BIT;
+void uart_putchar(char* ch) {
+	// wait until there is some space to write the char
+	// TDRE sets when there is some space in the FIFO
+    while(!(UART_S1_REG(UART0_BASE_PTR) & UART_S1_TDRE_MASK));
+    // write the data
+    UART_D_REG(UART0_BASE_PTR) = (uint8_t)*ch;
 }
 
-
-//but num_uart_handlers == 0??? 
-void uart0_rx_tx_handler() {
-	int i;
-	// call each uart handler
-	for (i = 0; i < num_uart_handlers; ++i) {
-		(*uart_handlers[i])();
+void uart_read(char* buffer, unsigned int count) {
+	while(count > 0) {
+		while(!uart_getchar(buffer)); // wait until there is a char to be read
+		count--;
 	}
 }
 
-//Also which UART port are we using? Or is it arbitrary? 
+void uart_write(char *buffer, unsigned int count) {
+	// check if done counting and char is not null
+	while(count > 0 && *buffer != '\0') {
+		uart_putchar(buffer++);
+		count--;
+	}
 
-char* uart_read() {
-	return UART0_D; 
 }
-
-void uart_write(char *buffer) {
-	UART0_D = *buffer;
-}
-
-
-//UART baud rate = UART module clock / (16 × (SBR[12:0] + BRFD))
-//50*10^6 / 115200 /60 = 27 approximately
-void uart_set_baud_rate(int rate) {
-	//UART0_BDH = 0;
-	UART0_BDL = 27;
-}
-
 
