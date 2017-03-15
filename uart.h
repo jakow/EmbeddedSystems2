@@ -27,6 +27,8 @@ extern void uart_rx_set_enable_flag(uint8_t enable);
 
 extern void uart_tx_set_enable_flag(uint8_t enable);
 
+extern char* uart_read();
 
+extern void uart_write(char* buffer); 
 
 #endif /* UART_H_ */
