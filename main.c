@@ -10,9 +10,9 @@
 #include "button.h"
 #include "uart.h"
 
-#define FCLK 5000000
+#define FCLK 50000000
 #define BAUD 115200
-// __init_hardware is called by the Freescale __thumb_startup function (see 
+// __init_hardware is called by the Freescale __thumb_startup function (see
 // vectors.c)
 void __init_hardware()
 {
@@ -23,7 +23,7 @@ void __init_hardware()
 	WDOG_UNLOCK = 0xD928;
 	WDOG_STCTRLH = 0xD2;
 
-	// Configure the MCG - set up clock dividers on 
+	// Configure the MCG - set up clock dividers on
 	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) | SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
 	MCG_C1 = MCG_C1_CLKS(2);
 
@@ -40,12 +40,12 @@ void main()
 	int timer;
 	// unsigned int count = 1;
 	char buffer[1];
-	float pi = 3.14159; 
+	float pi = 3.14159;
 	float alsopi = 3.14159;
 	led_on(LED_BLUE);
 	led_off(LED_YELLOW);
 	led_off(LED_GREEN);
-	
+
 	while(1)
 	{
 		if (btn_get(BTN0) == BTN_DOWN) {
@@ -60,8 +60,6 @@ void main()
 		if (uart_getchar(buffer)) {
 			uart_putchar(buffer);
 		}
-		uart_write("test", 4);
+		// uart_write("test", 4);
 	}
 }
-
-

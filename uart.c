@@ -11,19 +11,20 @@
 void uart_init(uint32_t clk_hz, uint32_t baud) {
 	uint16_t sbr, brfa;
 	uint8_t temp_reg;
-	// Enable clock for PORTF where the UART0 pins sit
-	SIM_SCGC5 |= SIM_SCGC5_PORTF_MASK;
-	// Enable clock for UART0
-	SIM_SCGC4 |= SIM_SCGC4_UART0_MASK;
+	// Enable clock for PORTE where the UART2 pins sit
+	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+	// Enable clock for UART2
+	SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;;
 	// set correct pin muxing
-	//enable UART0_RX on pin PTF18
-	//(see page 275 of Tower manual for the pin alternatives )
-	PORTE_PCR16 = PORT_PCR_MUX(3); // UART2 is ALT3 function for this pin
-   	// Enable UART0_RX function on PTF17
+	/* enable UART2_RX on pin PORTE16
+	 * (see page 275 of Tower manual for the pin alternatives )
+	 */
+	PORTE_PCR16 = PORT_PCR_MUX(3); // UART2 is ALT3 function for this pin*/
+   	// Enable UART0_RX function on PORTE17
 	PORTE_PCR17 = PORT_PCR_MUX(3); // UART is ALT3 function for this pin
 
 	// disable receiver and transmitter when setting options
-    UART_C2_REG(UART2_BASE_PTR) &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
+  UART_C2_REG(UART2_BASE_PTR) &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
     /* Set the default operation configuration:  8-bit mode, no parity:
      * 7		6			5 		4		3		2		1		0
      * LOOPS	UARTSWAI	RSRC	MODE	WAKE	ILT		PE		PT
@@ -31,22 +32,21 @@ void uart_init(uint32_t clk_hz, uint32_t baud) {
      * PE (Parity Enable): 1=enable, 0=disable
      * God knows what the rest of the options are. Let's disable them!
     */
-    UART_C1_REG(UART2_BASE_PTR) = 0;
+  UART_C1_REG(UART2_BASE_PTR) = 0;
 
     //
-    sbr = (uint16_t)((clk_hz)/(baud * 16));
-    // save previous value of BDH_REG with the SBR value cleared
-    temp_reg = UART_BDH_REG(UART2_BASE_PTR) & ~(UART_BDH_SBR(0x1F));
-    UART_BDL_REG(UART2_BASE_PTR) = UART_BDL_SBR(sbr);
-    UART_BDH_REG(UART2_BASE_PTR) = temp_reg | UART_BDH_SBR(sbr);
-    // calculate the fraction from: baud_rate = Fclk/(16*(SBR+BRFA/32))
-    brfa = (uint16_t) (2*(clk_hz-16*sbr*baud)/sbr);
-    // save previous value of C4 with BRFA cleared
-    temp_reg = (UART_C4_REG(UART2_BASE_PTR) & ~UART_C4_BRFA(0x1F));
-    UART_C4_REG(UART2_BASE_PTR) = temp_reg |  UART_C4_BRFA(brfa);
-    // enable receiver and transmitter
-    UART_C2_REG(UART2_BASE_PTR) |= UART_C2_TE_MASK | UART_C2_RE_MASK;
-
+  sbr = (uint16_t)((clk_hz)/(baud * 16));
+  // save previous value of BDH_REG with the SBR value cleared
+  temp_reg = UART_BDH_REG(UART2_BASE_PTR) & ~(UART_BDH_SBR(0x1F));
+  UART_BDL_REG(UART2_BASE_PTR) = UART_BDL_SBR(sbr);
+  UART_BDH_REG(UART2_BASE_PTR) = temp_reg | UART_BDH_SBR(sbr);
+  // calculate the fraction from: baud_rate = Fclk/(16*(SBR+BRFA/32))
+  brfa = (uint16_t) (2*(clk_hz-16*sbr*baud)/baud);
+  // save previous value of C4 with BRFA cleared
+  temp_reg = (UART_C4_REG(UART2_BASE_PTR) & ~UART_C4_BRFA(0x1F));
+  UART_C4_REG(UART2_BASE_PTR) = temp_reg |  UART_C4_BRFA(0);
+  // enable receiver and transmitter
+  UART_C2_REG(UART2_BASE_PTR) |= UART_C2_TE_MASK | UART_C2_RE_MASK;
 }
 
 /**
