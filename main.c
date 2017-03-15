@@ -37,29 +37,34 @@ void __init_hardware()
 
 void main()
 {
-	int timer;
-	// unsigned int count = 1;
-	char buffer[1];
-	float pi = 3.14159;
-	float alsopi = 3.14159;
-	led_on(LED_BLUE);
-	led_off(LED_YELLOW);
-	led_off(LED_GREEN);
+	int state;
+	int i;
+	// char buffer[1];
 
-	while(1)
-	{
-		if (btn_get(BTN0) == BTN_DOWN) {
-			led_on(LED_RED);
-			timer = 0;
+	state = 0;
+	while(1) {
+		if (btn_single_pulse(BTN1)){
+			if (state) led_off(state - 1);
+			state = (state == 4) ? 4 : state + 1;
+			led_on(state - 1);
+		} else if (btn_single_pulse(BTN0)) {
+			if (state) led_off(state - 1);
+			state = (state == 0) ? 0 : state - 1;
+			if (state) led_on(state - 1);
 		}
-		else {
-			timer = 1;
-			led_off(LED_RED);
-		}
-		// echo
-		if (uart_getchar(buffer)) {
-			uart_putchar(buffer);
-		}
+
+		// if (btn_get(BTN0) == BTN_DOWN) {
+		// 	led_on(LED_RED);
+		// 	timer = 0;
+		// }
+		// else {
+		// 	timer = 1;
+		// 	led_off(LED_RED);
+		// }
+		// // echo
+		// if (uart_getchar(buffer)) {
+		// 	uart_putchar(buffer);
+		// }
 		// uart_write("test", 4);
 	}
 }
