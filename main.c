@@ -38,6 +38,7 @@ void main()
 {
 	int state;
 	int i;
+	int timer;
 	// char buffer[1];
 
 	state = 0;
@@ -51,7 +52,9 @@ void main()
 			state = (state == 0) ? 0 : state - 1;
 			if (state) led_on(state - 1);
 		}
-
+		//improvised debouncer until figure out interrupts
+		timer = 1000;
+		while(timer--) ;
 		// if (btn_get(BTN0) == BTN_DOWN) {
 		// 	led_on(LED_RED);
 		// 	timer = 0;
@@ -67,3 +70,16 @@ void main()
 		// uart_write("test", 4);
 	}
 }
+// cyclic / non saturating counter
+// state = 4;
+// while(1) {
+// 	if (btn_single_pulse(BTN1)){
+// 		if (state != 4) led_off(state);
+// 		state = (state + 1) % 5;
+// 		if (state != 4) led_on(state);
+// 	} else if (btn_single_pulse(BTN0)) {
+// 		if (state != 4) led_off(state);
+// 		state = (state) ? (state - 1) % 5 : 4;
+// 		if (state != 4) led_on(state);
+// 	}
+// }
