@@ -57,7 +57,7 @@ void uart_init(uint32_t clk_hz, uint32_t baud) {
  * returs 0 if there was no character to be read
  */
 
-bool uart_getchar(char* ch) {
+bool uart_getchar(unsigned char* ch) {
 	bool char_present;
 	// check if there is a character to be read
 	char_present = (UART2_S1 & UART_S1_RDRF_MASK) != 0;
@@ -68,22 +68,22 @@ bool uart_getchar(char* ch) {
 	return char_present;
 }
 
-void uart_putchar(char* ch) {
+void uart_putchar(unsigned char* ch) {
 	// wait until there is some space to write the char
 	// TDRE sets when there is some space in the FIFO
     while(!(UART2_S1 & UART_S1_TDRE_MASK));
     // write the data
-		UART2_D = (uint8_t)*ch;
+		UART2_D = (uint8_t) *ch;
 }
 
-void uart_read(char* buffer, unsigned int count) {
+void uart_read(unsigned char* buffer, unsigned int count) {
 	while(count > 0) {
 		while(!uart_getchar(buffer)); // wait until there is a char to be read
 		count--;
 	}
 }
 
-void uart_write(char *buffer, unsigned int count) {
+void uart_write(unsigned char *buffer, unsigned int count) {
 	// check if done counting and char is not null
 	while(count > 0 && *buffer != '\0') {
 		uart_putchar(buffer++);

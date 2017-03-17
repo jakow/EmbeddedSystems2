@@ -39,7 +39,14 @@ int main()
 {
 	int state;
 	int timer;
-	char buffer[1];
+	unsigned char charval;
+	float floatval;
+	// create a filter
+	fltType* filter = flt_create();
+	float* coeffs;
+
+	// state >= 0 means that some filter is enabled
+	// state < 0 means filters are disabled
 	state = 0;
 	while(1) {
 		if (btn_single_pulse(BTN1)){
@@ -54,17 +61,15 @@ int main()
 		//improvised debouncer until figure out interrupts
 		timer = 1000;
 		while(timer--);
-			// if (btn_get(BTN0) == BTN_DOWN) {
-		// 	led_on(LED_RED);
-		// 	timer = 0;
-		// }
-		// else {
-		// 	timer = 1;
-		// 	led_off(LED_RED);
-		// }
-		// // echo
-		if (uart_getchar(buffer)) {
-			uart_putchar(buffer);
+		if (uart_getchar(&charval)) {
+			floatval = dsp_tofloat(charval); // conver to +/- 1 float
+
+			if (state >= 0) {
+				flt_writeInput(filter, floatval, *(flt_coeffs+state));
+			}
+			floatval = flt_readOutput(filter);
+			charval = dsp_tochar(floatval);
+			uart_putchar(&charval);
 		}
 	}
 }

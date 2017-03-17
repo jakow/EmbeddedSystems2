@@ -34,8 +34,11 @@ void flt_init(fltType * pThis);
 
 void flt_reset(fltType * pThis);
 
-#define flt_writeInput(pThis, input)  \
-	flt_filterBlock(pThis, &input, &pThis->output, 1);
+#define dsp_tofloat(value) ((value - 128) / 128.0f)
+#define dsp_tochar(value) ((unsigned char) (128*value + 128))
+
+#define flt_writeInput(pThis, input, coeffs)  \
+	flt_filterBlock(pThis, &input, &pThis->output, 1, coeffs);
 
 #define flt_readOutput(pThis)  \
 	pThis->output

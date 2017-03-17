@@ -20,12 +20,12 @@
 
 extern void uart_init(uint32_t clk_khz, uint32_t baud);
 
-extern bool uart_getchar(char* ch);
+extern bool uart_getchar(unsigned char* ch);
 
-extern void uart_putchar(char* ch);
+extern void uart_putchar(unsigned char* ch);
 
-extern void uart_read(char* buffer, unsigned int count);
+extern void uart_read(unsigned char* buffer, unsigned int count);
 
-extern void uart_write(char* buffer, unsigned int count);
+extern void uart_write(unsigned char* buffer, unsigned int count);
 
 #endif /* UART_H_ */
