@@ -8,9 +8,8 @@ extern float coeff_0k5_1k0[20];
 extern float coeff_1k5_1k75[20];
 extern float coeff_2k0_2k5[20];
 extern float coeff_3k0_3k75[20];
-float* flt_coeffs[4] = {
-	coeff_0k5_1k0, coeff_1k5_1k75, coeff_2k0_2k5, coeff_3k0_3k75
-};
+// array of above four arrays (or rather, array of pointers to those arrays)
+extern float* flt_coeffs[4];
 
 typedef struct
 {

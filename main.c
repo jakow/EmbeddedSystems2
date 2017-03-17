@@ -3,7 +3,6 @@
  * Based on Freescale Codewarrior Bareboard project template
  * Edited by Stan Manilov
  */
-
 #include "MK70F12.h"
 
 #include "led.h"
@@ -26,7 +25,8 @@ void __init_hardware()
 	WDOG_STCTRLH = 0xD2;
 
 	// Configure the MCG - set up clock dividers on
-	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) | SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
+	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) |
+		SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
 	MCG_C1 = MCG_C1_CLKS(2);
 
 	led_init();
@@ -35,28 +35,26 @@ void __init_hardware()
 	fpu_init();
 }
 
-void main()
+int main()
 {
 	int state;
-	// int i;
-	// char buffer[1];
-
-	state = 4;
+	int timer;
+	char buffer[1];
+	state = 0;
 	while(1) {
-		int timer;
 		if (btn_single_pulse(BTN1)){
-			if (state != 4) led_off(state); //if all not already off
+			if (state) led_off(state - 1);
 			state = (state == 4) ? 4 : state + 1;
-			led_on(state);
+			led_on(state - 1);
 		} else if (btn_single_pulse(BTN0)) {
-			if (state != 4) led_off(state);
+			if (state) led_off(state - 1);
 			state = (state == 0) ? 0 : state - 1;
-			led_on(state);
+			if (state) led_on(state - 1);
 		}
 		//improvised debouncer until figure out interrupts
 		timer = 1000;
-		while(timer--) ;
-		// if (btn_get(BTN0) == BTN_DOWN) {
+		while(timer--);
+			// if (btn_get(BTN0) == BTN_DOWN) {
 		// 	led_on(LED_RED);
 		// 	timer = 0;
 		// }
@@ -65,10 +63,9 @@ void main()
 		// 	led_off(LED_RED);
 		// }
 		// // echo
-		// if (uart_getchar(buffer)) {
-		// 	uart_putchar(buffer);
-		// }
-		// uart_write("test", 4);
+		if (uart_getchar(buffer)) {
+			uart_putchar(buffer);
+		}
 	}
 }
 // cyclic / non saturating counter

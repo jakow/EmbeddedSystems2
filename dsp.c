@@ -56,11 +56,14 @@ float coeff_3k0_3k75[20] =
   0.5, 1, 0.5, -1.8690948366571372, -0.9080021415622019
 };
 
+float* flt_coeffs[4]  = {
+	coeff_0k5_1k0, coeff_1k5_1k75, coeff_2k0_2k5, coeff_3k0_3k75
+};
 
 fltType *flt_create(void) {
   // Allocate memory for the object
-  fltType *result = (fltType *)malloc( sizeof( fltType ) );
-  flt_init( result );
+  fltType *result = (fltType*) malloc(sizeof(fltType));
+  flt_init(result);
   return result;
 }
 
@@ -137,7 +140,7 @@ void flt_filterBiquad( flt_executionState * pExecState )
   float accumulator;
 
   // Loop for all samples in the input buffer
-  while( count-- )
+  while(count--)
   {
     // Read input sample
     x0 = *(pInput++);
@@ -158,7 +161,7 @@ void flt_filterBiquad( flt_executionState * pExecState )
     w1 = w0;
 
     // Write output
-    *(pOutput++) = accumulator ;
+    *(pOutput++) = accumulator;
   }
 
   // Write state variables
