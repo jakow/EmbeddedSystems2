@@ -26,6 +26,8 @@ extern void uart_putchar(unsigned char* ch);
 
 extern void uart_read(unsigned char* buffer, unsigned int count);
 
-extern void uart_write(unsigned char* buffer, unsigned int count);
+extern void uart_write(unsigned char* buffer);
+
+extern void uart_write_n(unsigned char* buffer, unsigned int n);
 
 #endif /* UART_H_ */

@@ -82,11 +82,17 @@ void uart_read(unsigned char* buffer, unsigned int count) {
 		count--;
 	}
 }
-
-void uart_write(unsigned char *buffer, unsigned int count) {
-	// check if done counting and char is not null
-	while(count > 0 && *buffer != '\0') {
+void uart_write(unsigned char *buffer) {
+	// write until char array is null. Obviously very dangerous when your string
+	// is not null-terminated.
+	while(*buffer != '\0') {
 		uart_putchar(buffer++);
-		count--;
+	}
+}
+void uart_write_n(unsigned char *buffer, unsigned int n) {
+	// check if done counting and char is not null
+	while(n > 0 && *buffer != '\0') {
+		uart_putchar(buffer++);
+		n--;
 	}
 }

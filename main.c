@@ -4,12 +4,13 @@
  * Edited by Stan Manilov
  */
 #include "MK70F12.h"
-
+#include <stdio.h>
 #include "led.h"
 #include "button.h"
 #include "uart.h"
 #include "fpu.h"
 #include "dsp.h"
+#include "interrupts.h"
 
 #define FCLK 50000000
 #define BAUD 115200
@@ -33,56 +34,46 @@ void __init_hardware()
 	btn_init();
 	uart_init(FCLK, BAUD);
 	fpu_init();
+	uart2_interrupt_enable();
 }
+
+
 
 int main()
 {
-	int state;
+	int filter_id;
 	int timer;
 	unsigned char charval;
 	float floatval;
+	char buffer[16];
 	// create a filter
 	fltType* filter = flt_create();
-	float* coeffs;
 
-	// state >= 0 means that some filter is enabled
-	// state < 0 means filters are disabled
-	state = 0;
+	// filter_id < 4 means that some filter 0 to 3 is enabled
+	// filter_id == 4 means filter is disabled
+	filter_id = 4;
 	while(1) {
-		if (btn_single_pulse(BTN1)){
-			if (state) led_off(state - 1);
-			state = (state == 4) ? 4 : state + 1;
-			led_on(state - 1);
-		} else if (btn_single_pulse(BTN0)) {
-			if (state) led_off(state - 1);
-			state = (state == 0) ? 0 : state - 1;
-			if (state) led_on(state - 1);
-		}
+		// if (btn_single_pulse(BTN1)){
+		// 	if (filter_id != 4) led_off(filter_id);
+		// 	filter_id = (filter_id == 4) ? 4 : filter_id + 1;
+		// 	led_on(filter_id);
+		// } else if (btn_single_pulse(BTN0)) {
+		// 	if (filter_id) led_off(filter_id);
+		// 	filter_id = (filter_id == 0) ? 0 : filter_id - 1;
+		// 	led_on(filter_id);
+		// }
 		//improvised debouncer until figure out interrupts
-		timer = 1000;
-		while(timer--);
-		if (uart_getchar(&charval)) {
-			floatval = dsp_tofloat(charval); // conver to +/- 1 float
-
-			if (state >= 0) {
-				flt_writeInput(filter, floatval, *(flt_coeffs+state));
-			}
-			floatval = flt_readOutput(filter);
-			charval = dsp_tochar(floatval);
-			uart_putchar(&charval);
-		}
+		// timer = 1000;
+		// while(timer--);
+		// if (uart_getchar(&charval)) {
+		// 	floatval = dsp_chartofloat(charval); // conver to +/- 1 float
+		// 	if (filter_id < 4) {
+		// 		flt_writeInput(filter, floatval, select_filter(filter_id));
+		// 		floatval = flt_readOutput(filter);
+		// 	}
+		// 	charval = dsp_floattochar(floatval);
+		// 	uart_putchar(&charval);
+		// 	// uart_write((unsigned char*) buffer, 4);
+		// }
 	}
 }
-// cyclic / non saturating counter
-// state = 4;
-// while(1) {
-// 	if (btn_single_pulse(BTN1)){
-// 		if (state != 4) led_off(state);
-// 		state = (state + 1) % 5;
-// 		if (state != 4) led_on(state);
-// 	} else if (btn_single_pulse(BTN0)) {
-// 		if (state != 4) led_off(state);
-// 		state = (state) ? (state - 1) % 5 : 4;
-// 		if (state != 4) led_on(state);
-// 	}
-// }
