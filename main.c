@@ -24,7 +24,8 @@ void __init_hardware()
 	WDOG_STCTRLH = 0xD2;
 
 	// Configure the MCG - set up clock dividers on
-	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) | SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
+	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) |
+		SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
 	MCG_C1 = MCG_C1_CLKS(2);
 
 	led_init();
@@ -35,7 +36,7 @@ void __init_hardware()
 
 }
 
-void main()
+int main()
 {
 	int timer;
 	// unsigned int count = 1;
@@ -48,13 +49,8 @@ void main()
 
 	while(1)
 	{
-		if (btn_get(BTN0) == BTN_DOWN) {
-			led_on(LED_RED);
-			timer = 0;
-		}
-		else {
-			timer = 1;
-			led_off(LED_RED);
+		if (btn_single_pulse(BTN0)) {
+			led_toggle(LED_RED);
 		}
 		// echo
 		if (uart_getchar(buffer)) {
