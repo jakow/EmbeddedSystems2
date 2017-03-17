@@ -78,8 +78,8 @@ void flt_reset(fltType * pThis) {
 
 }
 
-int flt_filterBlock( fltType * pThis, float * pInput, float * pOutput,
-  unsigned int count, float* flt_coefficients )
+int flt_filterBlock(fltType * pThis, float * pInput, float * pOutput,
+  unsigned int count, float* flt_coefficients)
 {
   // The executionState structure holds call data, minimizing stack reads
   // and writes
