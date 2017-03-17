@@ -25,8 +25,7 @@ void __init_hardware()
 	WDOG_STCTRLH = 0xD2;
 
 	// Configure the MCG - set up clock dividers on
-	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) |
-		SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
+	SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) | SIM_CLKDIV1_OUTDIV3(1) | SIM_CLKDIV1_OUTDIV4(1);
 	MCG_C1 = MCG_C1_CLKS(2);
 
 	led_init();
@@ -35,22 +34,23 @@ void __init_hardware()
 	fpu_init();
 }
 
-int main()
+void main()
 {
 	int state;
-	int timer;
+	// int i;
 	// char buffer[1];
 
-	state = 0;
+	state = 4;
 	while(1) {
+		int timer;
 		if (btn_single_pulse(BTN1)){
-			if (state) led_off(state - 1);
+			if (state != 4) led_off(state); //if all not already off
 			state = (state == 4) ? 4 : state + 1;
-			led_on(state - 1);
+			led_on(state);
 		} else if (btn_single_pulse(BTN0)) {
-			if (state) led_off(state - 1);
+			if (state != 4) led_off(state);
 			state = (state == 0) ? 0 : state - 1;
-			if (state) led_on(state - 1);
+			led_on(state);
 		}
 		//improvised debouncer until figure out interrupts
 		timer = 1000;
