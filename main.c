@@ -9,6 +9,7 @@
 #include "led.h"
 #include "button.h"
 #include "uart.h"
+#include "fpu.h"
 
 #define FCLK 50000000
 #define BAUD 115200
@@ -31,31 +32,54 @@ void __init_hardware()
 	led_init();
 	btn_init();
 	uart_init(FCLK, BAUD);
-	//init FPU - coprocessor enable flags
-	SCB_CPACR |= SCB_CPACR_CP10_MASK | SCB_CPACR_CP11_MASK;
-
+	fpu_init();
 }
 
 int main()
 {
+	int state;
 	int timer;
-	// unsigned int count = 1;
-	char buffer[1];
-	float pi = 3.14159;
-	float alsopi = 3.14159;
-	led_on(LED_BLUE);
-	led_off(LED_YELLOW);
-	led_off(LED_GREEN);
+	// char buffer[1];
 
-	while(1)
-	{
-		if (btn_single_pulse(BTN0)) {
-			led_toggle(LED_RED);
+	state = 0;
+	while(1) {
+		if (btn_single_pulse(BTN1)){
+			if (state) led_off(state - 1);
+			state = (state == 4) ? 4 : state + 1;
+			led_on(state - 1);
+		} else if (btn_single_pulse(BTN0)) {
+			if (state) led_off(state - 1);
+			state = (state == 0) ? 0 : state - 1;
+			if (state) led_on(state - 1);
 		}
-		// echo
-		if (uart_getchar(buffer)) {
-			uart_putchar(buffer);
-		}
+		//improvised debouncer until figure out interrupts
+		timer = 1000;
+		while(timer--) ;
+		// if (btn_get(BTN0) == BTN_DOWN) {
+		// 	led_on(LED_RED);
+		// 	timer = 0;
+		// }
+		// else {
+		// 	timer = 1;
+		// 	led_off(LED_RED);
+		// }
+		// // echo
+		// if (uart_getchar(buffer)) {
+		// 	uart_putchar(buffer);
+		// }
 		// uart_write("test", 4);
 	}
 }
+// cyclic / non saturating counter
+// state = 4;
+// while(1) {
+// 	if (btn_single_pulse(BTN1)){
+// 		if (state != 4) led_off(state);
+// 		state = (state + 1) % 5;
+// 		if (state != 4) led_on(state);
+// 	} else if (btn_single_pulse(BTN0)) {
+// 		if (state != 4) led_off(state);
+// 		state = (state) ? (state - 1) % 5 : 4;
+// 		if (state != 4) led_on(state);
+// 	}
+// }
