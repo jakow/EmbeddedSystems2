@@ -10,6 +10,7 @@
 #include "button.h"
 #include "uart.h"
 #include "fpu.h"
+#include "dsp.h"
 
 #define FCLK 50000000
 #define BAUD 115200
