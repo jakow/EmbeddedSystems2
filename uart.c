@@ -5,6 +5,7 @@
  *      Author: s1243303
  */
 #include "uart.h"
+#include "interrupts.h"
 #include "MK70F12.h"
 #include "k70_bool.h"
 
@@ -50,6 +51,20 @@ void uart_init(uint32_t clk_hz, uint32_t baud) {
   UART2_C2 |= UART_C2_TE_MASK | UART_C2_RE_MASK;
 }
 
+
+// UART2 vector: 0x0000_0104
+void uart2_interrupt_enable() {
+  // Vector:
+  // IRQ: 49
+  //NVIC idx: IRQ / 32 = 1ve
+  UART2_NVIC_ISER |= UART2_NVIC_BIT;
+  // IPR: 32 / 4 = 4
+  // bit location: IRQ % 32 = 17
+  // set bit 17 in nviciser1. See defines above
+  UART2_NVIC_ISER |= UART2_NVIC_BIT;
+  UART2_C2 |= UART_C2_RIE_MASK;
+
+}
 /**
  * uart_getchar
  * get a character into the buffer if present

@@ -46,6 +46,10 @@ static void uart_handler() {
 	led_on(LED_RED);
 }
 
+static void btn_handler() {
+	
+}
+
 // The interrupt vector table. The #pragma line puts it in the correct text
 // section (defined in the linker script). The table then consists of the
 // initial stack pointer, followed by the vectors.

@@ -25,20 +25,30 @@ void btn_init() {
 
 	// set direction
 	// clear button 0 flag to set as input
-	GPIOD_PDDR &= ~BIT_BTN0;
+	GPIOD_PDDR &= ~BTN0_BIT;
 	// clear button 0 flag to set as input
-	GPIOE_PDDR &= ~BIT_BTN1;
+	GPIOE_PDDR &= ~BTN1_BIT;
 	// set default input values
 	btn_state[0] = 0;
 	btn_state[1] = 0;
 }
 
+void button_interrupt_enable() {
+  // enable button NVIC
+  // set GPIO interrupt behaviour (IRQC) - falling/rising edge
+  // You would need to reset the interrupt manually from the handler function
+  //to indicate that it has been handled. You do that using one of the PORTx_y
+  // registers. You'll figure out which one by looking at pages
+  // 309-315 in the same document.
+  // write a button handler
+}
+
 int btn_get(int btn_id) {
 	switch (btn_id) {
 	case BTN0:
-		return (GPIOD_PDIR & BIT_BTN0) == 0;
+		return (GPIOD_PDIR & BTN0_BIT) == 0;
 	case BTN1:
-		return (GPIOE_PDIR & BIT_BTN1) == 0;
+		return (GPIOE_PDIR & BTN1_BIT) == 0;
 	default:
 		return 0;
 
