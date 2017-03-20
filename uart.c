@@ -53,7 +53,7 @@ void uart_init(uint32_t clk_hz, uint32_t baud) {
 
 
 // UART2 vector: 0x0000_0104
-void uart2_interrupt_enable() {
+void uart_interrupt_enable() {
   // Vector:
   // IRQ: 49
   //NVIC idx: IRQ / 32 = 1ve
@@ -63,51 +63,63 @@ void uart2_interrupt_enable() {
   // set bit 17 in nviciser1. See defines above
   UART2_NVIC_ISER |= UART2_NVIC_BIT;
   UART2_C2 |= UART_C2_RIE_MASK;
-
 }
+
 /**
  * uart_getchar
  * get a character into the buffer if present
  * returns 1 if there was a character present
  * returs 0 if there was no character to be read
  */
-
-bool uart_getchar(unsigned char* ch) {
-	bool char_present;
+bool uart_getchar(char* ch) {
+	bool char_present = (UART2_S1 & UART_S1_RDRF_MASK) != 0;
 	// check if there is a character to be read
-	char_present = (UART2_S1 & UART_S1_RDRF_MASK) != 0;
 	if (char_present) {
 		// get data
-		*ch = (char) UART2_D;
+		*ch = UART2_D;
 	}
 	return char_present;
 }
 
-void uart_putchar(unsigned char* ch) {
+void uart_putchar(char ch) {
 	// wait until there is some space to write the char
 	// TDRE sets when there is some space in the FIFO
     while(!(UART2_S1 & UART_S1_TDRE_MASK));
-    // write the data
-		UART2_D = (uint8_t) *ch;
+		UART2_D = ch;
 }
 
-void uart_read(unsigned char* buffer, unsigned int count) {
+bool uart_getsigned(int8_t* num) {
+	bool num_present = (UART2_S1 & UART_S1_RDRF_MASK) != 0;
+	// check if there is a character to be read
+	if (num_present) {
+		// get data
+		*num = UART2_D;
+	}
+	return num_present;
+}
+
+void uart_putsigned(int8_t num) {
+	while(!(UART2_S1 & UART_S1_TDRE_MASK));
+	UART2_D = num;
+}
+
+void uart_read(char* buffer, unsigned int count) {
 	while(count > 0) {
 		while(!uart_getchar(buffer)); // wait until there is a char to be read
 		count--;
 	}
 }
-void uart_write(unsigned char *buffer) {
+void uart_write(char *buffer) {
 	// write until char array is null. Obviously very dangerous when your string
-	// is not null-terminated.
+	// is not null-terminated. If not sure use uart_write_n
 	while(*buffer != '\0') {
-		uart_putchar(buffer++);
+		uart_putchar(*buffer++);
 	}
 }
-void uart_write_n(unsigned char *buffer, unsigned int n) {
+void uart_write_n(char *buffer, unsigned int n) {
 	// check if done counting and char is not null
 	while(n > 0 && *buffer != '\0') {
-		uart_putchar(buffer++);
+		uart_putchar(*buffer++);
 		n--;
 	}
 }

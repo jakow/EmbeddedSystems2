@@ -11,6 +11,8 @@ extern float coeff_3k0_3k75[20];
 // array of above four arrays (or rather, array of pointers to those arrays)
 extern float* flt_coeffs[4];
 
+extern float test_coeff[20];
+
 #define select_filter(idx) (flt_coeffs[idx])
 
 typedef struct

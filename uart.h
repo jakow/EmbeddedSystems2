@@ -19,20 +19,26 @@
 #define TX_INT_COMPL_ENABLE_BIT (1 << 6)
 
 #define UART2_IRQ 49
-#define UART2_IDX NVIC_IDX(UART2_IRQ)
+#define UART2_NVIC_IDX NVIC_IDX(UART2_IRQ)
 #define UART2_NVIC_BIT NVIC_BIT(UART2_IRQ)
-#define UART2_NVIC_ISER NVIC_ISER_REG(NVIC_BASE_PTR, NVIC_IDX(UART2_IRQ))
+#define UART2_NVIC_ISER NVIC_ISER_REG(NVIC_BASE_PTR, UART2_NVIC_IDX)
 
 extern void uart_init(uint32_t clk_khz, uint32_t baud);
 
-extern bool uart_getchar(unsigned char* ch);
+extern void uart_interrupt_enable();
 
-extern void uart_putchar(unsigned char* ch);
+extern bool uart_getchar(char* ch);
 
-extern void uart_read(unsigned char* buffer, unsigned int count);
+extern void uart_putchar(char ch);
 
-extern void uart_write(unsigned char* buffer);
+extern bool uart_getsigned(int8_t* num);
 
-extern void uart_write_n(unsigned char* buffer, unsigned int n);
+extern void uart_putsigned(int8_t num);
+
+extern void uart_read(char* buffer, unsigned int count);
+
+extern void uart_write(char* buffer);
+
+extern void uart_write_n(char* buffer, unsigned int n);
 
 #endif /* UART_H_ */

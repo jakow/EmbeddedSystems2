@@ -5,7 +5,7 @@
  *      Author: s1243303
  */
 #include "interrupts.h"
-
+#include "MK70F12.h"
 #ifndef SRC_BUTTON_H_
 #define SRC_BUTTON_H_
 
@@ -14,21 +14,24 @@
 
 #define BTN0 0
 #define BTN1 1
-// PORTD bit 0
+// Button 0 is PORTD bit 0
 #define BTN0_BIT	(1 << 0)
-#define BTN0_IRQ 90
+#define PORTD_IRQ 90
 
-// PORTE bit 0
+// Button 1 is PORTE bit 26
 #define BTN1_BIT	(1 << 26)
-#define BTN1_IRQ 91
+#define PORTE_IRQ 91
 
-// button 0 and 1 have the same NVIC
-#define BTN_NVIC NVIC_IDX(BTN0_IRQ)
-// and the same IPR register
-#define BTN_NVIC_IPR NVIC_IPR_REG(BTN0_IRQ)
+// PORTD and PORTE have the same NVIC idx (2) and the same IPR register
+#define BTN_NVIC_IDX NVIC_IDX(PORTD_IRQ)
+#define BTN_NVIC_IPR NVIC_IPR_REG(PORTD_IRQ)
+#define BTN_NVIC_ISER NVIC_ISER_REG(NVIC_BASE_PTR, BTN_NVIC_IDX)
+// the interrupt vector bits for button 0 and 1
+#define BTN0_NVIC_BIT NVIC_BIT(PORTD_IRQ)
+#define BTN1_NVIC_BIT NVIC_BIT(PORTE_IRQ)
 
 extern void btn_init();
-extern int btn_interrupt_enable();
+extern void btn_interrupt_enable();
 extern int btn_get(int btn_id);
 extern int btn_single_pulse(int btn_id);
 

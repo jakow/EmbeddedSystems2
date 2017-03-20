@@ -13,6 +13,14 @@
 
 static int btn_state[2];
 
+void btn_interrupt_enable() {
+  // enable button NVIC
+	BTN_NVIC_ISER |= BTN0_NVIC_BIT | BTN1_NVIC_BIT;
+  // set GPIO interrupt behaviour (IRQC)in the Port Control Register (PCR)
+	PORTD_PCR0 |= PORT_PCR_IRQC(0xA); // interrupt on falling edge
+	PORTD_PCR26 |= PORT_PCR_IRQC(0xA);
+}
+
 void btn_init() {
 	// enable gates on the ports
 	SIM_SCGC5 |=
@@ -20,8 +28,8 @@ void btn_init() {
 			SIM_SCGC5_PORTE_MASK;
 
 
-	PORTD_PCR0 	= IS_GPIO; // | IRQC_BOTH_EDGES;
-	PORTE_PCR26 = IS_GPIO; //  | IRQC_BOTH_EDGES;
+	PORTD_PCR0 	= IS_GPIO;
+	PORTE_PCR26 = IS_GPIO;
 
 	// set direction
 	// clear button 0 flag to set as input
@@ -33,15 +41,11 @@ void btn_init() {
 	btn_state[1] = 0;
 }
 
-void button_interrupt_enable() {
-  // enable button NVIC
-  // set GPIO interrupt behaviour (IRQC) - falling/rising edge
-  // You would need to reset the interrupt manually from the handler function
-  //to indicate that it has been handled. You do that using one of the PORTx_y
-  // registers. You'll figure out which one by looking at pages
-  // 309-315 in the same document.
-  // write a button handler
-}
+
+
+// void button_interrupt_clear(int button) {
+//
+// }
 
 int btn_get(int btn_id) {
 	switch (btn_id) {

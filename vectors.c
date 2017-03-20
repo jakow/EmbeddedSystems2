@@ -47,7 +47,13 @@ static void uart_handler() {
 }
 
 static void btn_handler() {
-	
+		// write a button handler
+	// You would need to reset the interrupt manually from the handler function
+	//to indicate that it has been handled. You do that using one of the PORTx_y
+	// registers. You'll figure out which one by looking at pages
+	// 309-315 in the same document.
+	led_toggle(LED_BLUE);
+
 }
 
 // The interrupt vector table. The #pragma line puts it in the correct text
@@ -125,7 +131,7 @@ volatile __declspec(vectortable) vt_with_sp_t __vect_table = {
 		default_isr,     // 0x3E UART0_ERR
 		default_isr,     // 0x3F UART1_RX_TX
 		default_isr,     // 0x40 UART1_ERR
-		uart_handler,     // 0x41
+		uart_handler,    // 0x41 UART2_RX_TX
 		default_isr,     // 0x42 UART2_ERR
 		default_isr,     // 0x43 UART3_RX_TX
 		default_isr,     // 0x44 UART3_ERR
@@ -148,27 +154,27 @@ volatile __declspec(vectortable) vt_with_sp_t __vect_table = {
 		default_isr,     // 0x55 PIT1
 		default_isr,     // 0x56 PIT2
 		default_isr,     // 0x57 PIT3
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
-		default_isr,
+		default_isr,		 // 0x58
+		default_isr,     // 0x59
+		default_isr,     // 0x5A
+		default_isr,     // 0x5B
+		default_isr,     // 0x5C
+		default_isr,     // 0x5D
+		default_isr,     // 0x5E
+		default_isr,     // 0x5F
+		default_isr,     // 0x60
+		default_isr,     // 0x61
+		default_isr,     // 0x62
+		default_isr,     // 0x63
+		default_isr,     // 0x64
+		default_isr,     // 0x65
+		default_isr,     // 0x66
+		default_isr,     // 0x67 PORTA
+		default_isr,     // 0x68 PORTB
+		default_isr,     // 0x69 PORTC
+		btn_handler,     // 0x6A PORTD
+		btn_handler,     // 0x6B PORTE
+		default_isr,     // 0x6C PORTF
 		default_isr,
 		default_isr,
 		default_isr,
