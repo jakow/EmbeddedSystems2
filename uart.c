@@ -7,7 +7,6 @@
 #include "uart.h"
 #include "interrupts.h"
 #include "MK70F12.h"
-#include "k70_bool.h"
 
 void uart_init(uint32_t clk_hz, uint32_t baud) {
 	uint16_t sbr, brfa;

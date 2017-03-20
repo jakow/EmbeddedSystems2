@@ -10,8 +10,7 @@
 #include "uart.h"
 #include "fpu.h"
 #include "dsp.h"
-#include "interrupts.h"
-
+#include <stdbool.h>
 #define FCLK 50000000
 #define BAUD 115200
 #define NO_FILTER -1
