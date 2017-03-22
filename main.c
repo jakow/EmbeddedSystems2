@@ -50,8 +50,6 @@ int main() {
 	// 	1: 1.5kHz - 1.75kHz
 	// 	2: 2kHz - 2.5kHz
 	// 	3: 3kHz - 3.75kHz
-
-
 	filter_id = NO_FILTER;
 	while(1) {
 		if (uart_getsigned(&data)) {
