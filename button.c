@@ -18,7 +18,7 @@ void btn_interrupt_enable() {
 	BTN_NVIC_ISER |= BTN0_NVIC_BIT | BTN1_NVIC_BIT;
   // set GPIO interrupt behaviour (IRQC)in the Port Control Register (PCR)
 	PORTD_PCR0 |= PORT_PCR_IRQC(0xA); // interrupt on falling edge
-	PORTD_PCR26 |= PORT_PCR_IRQC(0xA);
+	PORTE_PCR26 |= PORT_PCR_IRQC(0xA);
 }
 
 void btn_init() {

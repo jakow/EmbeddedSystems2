@@ -46,14 +46,24 @@ static void uart_handler() {
 	led_on(LED_RED);
 }
 
-static void btn_handler() {
+static void btn0_handler() {
 		// write a button handler
 	// You would need to reset the interrupt manually from the handler function
 	//to indicate that it has been handled. You do that using one of the PORTx_y
 	// registers. You'll figure out which one by looking at pages
 	// 309-315 in the same document.
-	led_toggle(LED_BLUE);
 
+
+	// Write 1 to clear Interrupt Status Flag
+	PORTD_PCR0 |= (1 << 24);
+	led_toggle(LED_BLUE);
+}
+
+static void btn1_handler() {
+
+
+	PORTE_PCR26 |= (1 << 24);
+	led_toggle(LED_GREEN);
 }
 
 // The interrupt vector table. The #pragma line puts it in the correct text
@@ -172,8 +182,8 @@ volatile __declspec(vectortable) vt_with_sp_t __vect_table = {
 		default_isr,     // 0x67 PORTA
 		default_isr,     // 0x68 PORTB
 		default_isr,     // 0x69 PORTC
-		btn_handler,     // 0x6A PORTD
-		btn_handler,     // 0x6B PORTE
+		btn0_handler,     // 0x6A PORTD
+		btn1_handler,     // 0x6B PORTE
 		default_isr,     // 0x6C PORTF
 		default_isr,
 		default_isr,
