@@ -14,6 +14,8 @@
 
 #define BTN0 0
 #define BTN1 1
+
+// IRQs from table 86 in K70 manual
 // Button 0 is PORTD bit 0
 #define BTN0_BIT	(1 << 0)
 #define PORTD_IRQ 90
@@ -25,7 +27,10 @@
 // PORTD and PORTE have the same NVIC idx (2) and the same IPR register
 #define BTN_NVIC_IDX NVIC_IDX(PORTD_IRQ)
 #define BTN_NVIC_IPR NVIC_IPR_REG(PORTD_IRQ)
-#define BTN_NVIC_ISER NVIC_ISER_REG(NVIC_BASE_PTR, BTN_NVIC_IDX)
+#define PORTD_NVIC_ISER NVIC_ISER(PORTD_IRQ)
+#define PORTE_NVIC_ISER NVIC_ISER(PORTE_IRQ)
+#define PORTD_NVIC_ICPR NVIC_ICPR(PORTD_IRQ)
+#define PORTE_NVIC_ICPR NVIC_ICPR(PORTE_IRQ)
 // the interrupt vector bits for button 0 and 1
 #define BTN0_NVIC_BIT NVIC_BIT(PORTD_IRQ)
 #define BTN1_NVIC_BIT NVIC_BIT(PORTE_IRQ)

@@ -4,7 +4,7 @@
 #include "MK70F12.h"
 #define NVIC_IDX(irq) (irq / 32)
 #define NVIC_IPR_REG(irq) (irq / 4)
-#define NVIC_BIT(irq) (irq % 32)
+#define NVIC_BIT(irq) (1 << (irq % 32))
 
 
 // uart2 nvic iser  is nviciser1
