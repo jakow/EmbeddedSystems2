@@ -24,7 +24,7 @@ Button interrupts are used to toggle between filters, as opposed to polling. The
 
 To enable button interrupts, the following steps are taken. First, the appropriate index into the NVIC table is calculated using macros. According to K70 Manual, the index is essentially `floor(IRQ / 32)` where `IRQ` is the interrupt source number taken from Table 3-4 of the manual. For PORTD and PORTE this is NVIC2. Then the appropriate bit positions (`BTN*_NVIC_BIT`) in the vector are also calculated. To enable interrupts, write set the bit flag in the Interrupt Set Enable Register (ISER) of the particular NVIC index.
 
-Lastly, to configure interrupt behaviour of the pin, Port Control Registers (PCR) of PORTD and PORTE must be updated. The IRQC field of PCR dictates what event triggers the interrupt. In this case, it is the rising edge, which is mapped to value of `b1001` or hex `0x9` in the IRQC.
+Lastly, to configure interrupt behaviour of the pin, Port Control Registers (PCR) of PORTD and PORTE must be updated. The IRQC field of PCR dictates what event triggers the interrupt. In this case, it is the rising edge, which is mapped to value of `b1001` (or `0x9`) in the IRQC.
 
 
 ### Button functions
