@@ -4,6 +4,7 @@
 #include "MK70F12.h"
 #include "uart.h"
 #include "led.h"
+#include "button.h"
 // __thumb_startup is provided by the Freescale C library
 //
 extern void __thumb_startup();
@@ -41,29 +42,29 @@ static void default_isr()
 	}
 }
 
-static void uart_handler() {
-	// uart_write((unsigned char*) "success!!!!!");
-	led_on(LED_RED);
+int saturating_counter(int8_t value, int8_t increment, int8_t min, int8_t max) {
+	if (value + increment > max)
+		return max;
+	else if (value + increment < min)
+		return min;
+	else
+		return value + increment;
 }
 
 static void btn0_handler() {
-		// write a button handler
-	// You would need to reset the interrupt manually from the handler function
-	//to indicate that it has been handled. You do that using one of the PORTx_y
-	// registers. You'll figure out which one by looking at pages
-	// 309-315 in the same document.
-
-
+	led_off(filter_id);
+	filter_id = saturating_counter(filter_id, 1, -1, 3);
+	led_on(filter_id);
 	// Write 1 to clear Interrupt Status Flag
-	PORTD_ISFR |= (1 << 0);
-	// PORTD_PCR0 |= (1 << 24);
-	led_toggle(LED_BLUE);
+	PORTD_ISFR |= BTN0_BIT;
 }
 
 static void btn1_handler() {
-	PORTE_ISFR |= (1 << 26);
-	// PORTE_PCR26 |= (1 << 24);
-	led_toggle(LED_GREEN);
+	led_off(filter_id);
+	filter_id = saturating_counter(filter_id, -1, -1, 3);
+	led_on(filter_id);
+	// Write 1 to clear Interrupt Status Flag
+	PORTE_ISFR |= BTN1_BIT;
 }
 
 // The interrupt vector table. The #pragma line puts it in the correct text

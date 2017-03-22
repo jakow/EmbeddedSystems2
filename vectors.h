@@ -10,4 +10,5 @@ typedef struct {
 	vector_table_t vectors;
 } vt_with_sp_t;
 
+extern int8_t filter_id; 
 #endif

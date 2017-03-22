@@ -10,6 +10,7 @@
 #include "uart.h"
 #include "fpu.h"
 #include "dsp.h"
+#include "vectors.h"
 #include <stdbool.h>
 #define FCLK 50000000
 #define BAUD 115200
@@ -43,45 +44,17 @@ int8_t filter(fltType*, int8_t, int8_t);
 
 
 int main() {
-	// int8_t filter_id;
-	// int8_t data;
-	// fltType* flt = flt_create();
+	filter_id = NO_FILTER;
+	int8_t data;
+	fltType* flt = flt_create();
 	while(1) {
-		// filter_id = get_current_filter();
-		// if (uart_getsigned(&data)) {
-		// 	if (filter_id != NO_FILTER)
-		// 		data = filter(flt, data, filter_id);
-		// uart_putsigned(data);
-		// }
+		if (uart_getsigned(&data)) {
+			if (filter_id != NO_FILTER)
+				data = filter(flt, data, filter_id);
+		uart_putsigned(data);
+		}
 	}
 	return 0;
-}
-
-
-int saturating_counter(int8_t value, int8_t increment, int8_t min, int8_t max) {
-	if (value + increment > max)
-		return max;
-	else if (value + increment < min)
-		return min;
-	else
-		return value + increment;
-}
-
-int get_current_filter() {
-	// filter_id >= 0 means that some filter 0 to 3 is enabled
-	// filter_id == -1 means filter is disabled
-	// the program starts with filter disabled
-	static int8_t filter_id = -1;
-	if (btn_single_pulse(BTN0)){
-		led_off(filter_id);
-		filter_id = saturating_counter(filter_id, 1, -1, 3);
-		led_on(filter_id);
-	} else if (btn_single_pulse(BTN1)) {
-		led_off(filter_id);
-		filter_id = saturating_counter(filter_id, -1, -1, 3);
-		led_on(filter_id);
-	}
-	return filter_id;
 }
 
 int8_t filter(fltType* filterObject, int8_t input, int8_t filter_id) {
