@@ -12,17 +12,7 @@
 
 static int btn_state[2];
 
-void btn_interrupt_enable() {
-  // set enable interrupts
-	PORTD_NVIC_ISER |= BTN0_NVIC_BIT;
-	PORTE_NVIC_ISER |= BTN1_NVIC_BIT;
-	// clear pending interupts
-	PORTD_NVIC_ICPR |= BTN0_NVIC_BIT;
-	PORTE_NVIC_ICPR |= BTN1_NVIC_BIT;
-  // set GPIO interrupt behaviour (IRQC)in the Port Control Register (PCR)
-	PORTD_PCR0 |= PORT_PCR_IRQC(0xA); // interrupt on falling edge
-	PORTE_PCR26 |= PORT_PCR_IRQC(0xA);
-}
+
 
 void btn_init() {
 	// enable clock gates on the ports
@@ -30,7 +20,7 @@ void btn_init() {
 			SIM_SCGC5_PORTD_MASK |
 			SIM_SCGC5_PORTE_MASK;
 
-  // set the pin multiplexer function to gpio 
+  // set the pin multiplexer function to gpio
 	PORTD_PCR0 	= IS_GPIO;
 	PORTE_PCR26 = IS_GPIO;
 
@@ -42,6 +32,18 @@ void btn_init() {
 	// set default input values
 	btn_state[0] = 0;
 	btn_state[1] = 0;
+}
+
+void btn_interrupt_enable() {
+  // set enable interrupts
+	PORTD_NVIC_ISER |= BTN0_NVIC_BIT;
+	PORTE_NVIC_ISER |= BTN1_NVIC_BIT;
+	// clear pending interupts
+	PORTD_NVIC_ICPR |= BTN0_NVIC_BIT;
+	PORTE_NVIC_ICPR |= BTN1_NVIC_BIT;
+  // set GPIO interrupt behaviour (IRQC)in the Port Control Register (PCR)
+	PORTD_PCR0 |= PORT_PCR_IRQC(0x9); // interrupt on falling edge
+	PORTE_PCR26 |= PORT_PCR_IRQC(0x9);
 }
 
 // get the current value of the button. 1 - pressed, 0 - not pressed
