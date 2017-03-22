@@ -2,8 +2,10 @@
 #define INTERRUPTS_H_
 
 #include "MK70F12.h"
+// map the IRQ to the correct NVIC pointer
 #define NVIC_IDX(irq) (irq / 32)
 #define NVIC_IPR_REG(irq) (irq / 4)
+// get the NVIC bit mask of a particular IRQ
 #define NVIC_BIT(irq) (1 << (irq % 32))
 
 

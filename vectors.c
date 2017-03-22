@@ -41,10 +41,6 @@ static void default_isr()
 	}
 }
 
-static void uart_handler() {
-	// uart_write((unsigned char*) "success!!!!!");
-	led_on(LED_RED);
-}
 
 static void btn0_handler() {
 		// write a button handler
@@ -55,15 +51,15 @@ static void btn0_handler() {
 
 
 	// Write 1 to clear Interrupt Status Flag
-	PORTD_ISFR |= (1 << 0);
 	// PORTD_PCR0 |= (1 << 24);
 	led_toggle(LED_BLUE);
+	PORTD_ISFR |= (1 << 0);
 }
 
 static void btn1_handler() {
-	PORTE_ISFR |= (1 << 26);
 	// PORTE_PCR26 |= (1 << 24);
 	led_toggle(LED_GREEN);
+	PORTE_ISFR |= (1 << 26);
 }
 
 // The interrupt vector table. The #pragma line puts it in the correct text
