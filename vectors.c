@@ -43,10 +43,10 @@ static void default_isr()
 }
 
 /*
- * This is the global filter ID that is used to select the filter
+ * This is the global filter ID that is used to select the filter in the main
  */
- #define NO_FILTER -1
- 
+#define NO_FILTER -1
+
 int8_t filter_id = NO_FILTER;
 
 int saturating_counter(int8_t value, int8_t increment, int8_t min, int8_t max) {
@@ -59,6 +59,8 @@ int saturating_counter(int8_t value, int8_t increment, int8_t min, int8_t max) {
 }
 
 static void btn0_handler() {
+	// turn previous off, turn next on
+	// if filter_id = -1, no led is turned on
 	led_off(filter_id);
 	filter_id = saturating_counter(filter_id, 1, -1, 3);
 	led_on(filter_id);

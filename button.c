@@ -25,12 +25,12 @@ void btn_interrupt_enable() {
 }
 
 void btn_init() {
-	// enable gates on the ports
+	// enable clock gates on the ports
 	SIM_SCGC5 |=
 			SIM_SCGC5_PORTD_MASK |
 			SIM_SCGC5_PORTE_MASK;
 
-
+  // set the pin multiplexer function to gpio 
 	PORTD_PCR0 	= IS_GPIO;
 	PORTE_PCR26 = IS_GPIO;
 
@@ -44,12 +44,7 @@ void btn_init() {
 	btn_state[1] = 0;
 }
 
-
-
-// void button_interrupt_clear(int button) {
-//
-// }
-
+// get the current value of the button. 1 - pressed, 0 - not pressed
 int btn_get(int btn_id) {
 	switch (btn_id) {
 	case BTN0:
@@ -62,7 +57,9 @@ int btn_get(int btn_id) {
 	}
 }
 
-
+// use this function to continuously poll if a button was pressed.
+// this function returns 1 when there was a recent change of state from pressed
+// to released.
 //state 0: has not been pressed
 //state 1: has been pressed
 //returns 1 on falling edge (after pressed and released)

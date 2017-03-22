@@ -3,6 +3,8 @@
 #include <stdlib.h> // For malloc/free
 #include <string.h> // For memset
 
+/******************************** README **************************************/
+
 // The micromodeler DSP code was changed so that it can use the
 // float arrays below as parameters. This takes advantage of the fact that
 // the bandpass filters have the same topology and the same number
