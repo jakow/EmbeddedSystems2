@@ -43,16 +43,16 @@ int8_t filter(fltType*, int8_t, int8_t);
 
 
 int main() {
-	int8_t filter_id;
-	int8_t data;
-	fltType* flt = flt_create();
+	// int8_t filter_id;
+	// int8_t data;
+	// fltType* flt = flt_create();
 	while(1) {
-		filter_id = get_current_filter();
-		if (uart_getsigned(&data)) {
-			if (filter_id != NO_FILTER)
-				data = filter(flt, data, filter_id);
-		uart_putsigned(data);
-		}
+		// filter_id = get_current_filter();
+		// if (uart_getsigned(&data)) {
+		// 	if (filter_id != NO_FILTER)
+		// 		data = filter(flt, data, filter_id);
+		// uart_putsigned(data);
+		// }
 	}
 	return 0;
 }
