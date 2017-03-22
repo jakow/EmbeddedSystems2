@@ -12,6 +12,7 @@
 #include "dsp.h"
 #include "vectors.h"
 #include <stdbool.h>
+
 #define FCLK 50000000
 #define BAUD 115200
 #define NO_FILTER -1

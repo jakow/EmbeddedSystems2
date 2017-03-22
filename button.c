@@ -9,13 +9,16 @@
 //   pull up resistor
 
 #define IS_GPIO  (PORT_PCR_MUX(1) | PORT_PCR_DSE_MASK | PORT_PCR_PE_MASK | PORT_PCR_PS_MASK)
-#define IRQC_BOTH_EDGES (11 << PORT_PCR_IRQC_SHIFT)
 
 static int btn_state[2];
 
 void btn_interrupt_enable() {
-  // enable button NVIC
-	BTN_NVIC_ISER |= BTN0_NVIC_BIT | BTN1_NVIC_BIT;
+  // set enable interrupts
+	PORTD_NVIC_ISER |= BTN0_NVIC_BIT;
+	PORTE_NVIC_ISER |= BTN1_NVIC_BIT;
+	// clear pending interupts
+	PORTD_NVIC_ICPR |= BTN0_NVIC_BIT;
+	PORTE_NVIC_ICPR |= BTN1_NVIC_BIT;
   // set GPIO interrupt behaviour (IRQC)in the Port Control Register (PCR)
 	PORTD_PCR0 |= PORT_PCR_IRQC(0xA); // interrupt on falling edge
 	PORTE_PCR26 |= PORT_PCR_IRQC(0xA);
