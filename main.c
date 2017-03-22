@@ -58,9 +58,10 @@ int main() {
 			if (filter_id != NO_FILTER)
 				data = filter(flt, data, filter_id);
 		uart_putsigned(data);
-	}
+		}
 	}
 	return 0;
+
 }
 
 int8_t filter(fltType* filterObject, int8_t input, int8_t filter_id) {

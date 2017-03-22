@@ -7,7 +7,8 @@
 // float arrays below as parameters. This takes advantage of the fact that
 // the bandpass filters have the same topology and the same number
 // of coefficients. To use a particular filter, it is enough to point
-// the modified code to which coefficient array it should use
+// the modified code to which coefficient array it should use. This is done
+// by passing extra parameter to flt_filterBlock
 
 float coeff_0k5_1k0[20] =
 {
@@ -93,7 +94,12 @@ void flt_reset(fltType * pThis) {
   pThis->output = 0; // Reset output
 
 }
-
+/*
+flt_coefficients is the pointer to array which dictates which set of filter
+coefficients to use. This takes advantage of the fact that
+the bandpass filters have the same topology and the same number
+of coefficients. (Don't Repeat Yourself!)
+*/
 int flt_filterBlock(fltType * pThis, float * pInput, float * pOutput,
   unsigned int count, float* flt_coefficients)
 {
@@ -112,6 +118,7 @@ int flt_filterBlock(fltType * pThis, float * pInput, float * pOutput,
   executionState.pState = pThis->state;
   // Each call to filterBiquad() will advance pState and pCoefficients
   // to the next biquad
+  // use the coefficients supplied with the input parameter
   executionState.pCoefficients = flt_coefficients;
 
   // The 1st call to flt_filterBiquad() reads from the caller supplied input
