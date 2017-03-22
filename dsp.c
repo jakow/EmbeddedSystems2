@@ -3,6 +3,12 @@
 #include <stdlib.h> // For malloc/free
 #include <string.h> // For memset
 
+// The micromodeler DSP code was changed so that it can use the
+// float arrays below as parameters. This takes advantage of the fact that
+// the bandpass filters have the same topology and the same number
+// of coefficients. To use a particular filter, it is enough to point
+// the modified code to which coefficient array it should use
+
 float coeff_0k5_1k0[20] =
 {
   // b0, b1, b2, a1, a2

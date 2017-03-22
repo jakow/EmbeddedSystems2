@@ -13,8 +13,6 @@ extern float* flt_coeffs[4];
 
 extern float test_coeff[20];
 
-#define select_filter(idx) (flt_coeffs[idx])
-
 typedef struct
 {
 	float state[16];

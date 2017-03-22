@@ -36,12 +36,22 @@ void __init_hardware()
 	uart_init(FCLK, BAUD);
 	btn_interrupt_enable();
 }
-
+// filter a single int8 sample and return the output
 int8_t filter(fltType*, int8_t, int8_t);
 
 int main() {
 	int8_t data;
 	fltType* flt = flt_create();
+	// filter ID is defined in VECTORS.H/.C, where it is modified by button
+	// handlers. The main code consumes this value to select which filter
+	// to use. NO_FILTER (== -1) means that no filter is used.
+	// Otherwise the filter are mapped as follows:
+	// 	0: 0.5kHz - 1kHz
+	// 	1: 1.5kHz - 1.75kHz
+	// 	2: 2kHz - 2.5kHz
+	// 	3: 3kHz - 3.75kHz
+
+
 	filter_id = NO_FILTER;
 	while(1) {
 		if (uart_getsigned(&data)) {
@@ -55,9 +65,9 @@ int main() {
 
 int8_t filter(fltType* filterObject, int8_t input, int8_t filter_id) {
 		float float_val = ((float) input) /128.0f;
-			// select_filter just chooses the correct index of an array
-			// to use one of 4 filter coefficient tables
-		flt_writeInput(filterObject, float_val, select_filter(filter_id));
+		// internally, choosing filter_id is just chooses the correct index
+		// of an array to use one of 4 filter coefficient tables
+		flt_writeInput(filterObject, float_val, flt_coeffs[filter_id]);
 		float_val = flt_readOutput(filterObject);
 		input = (int8_t) (float_val* 128.0f);
 		return input;
