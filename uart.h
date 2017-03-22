@@ -10,7 +10,6 @@
 
 
 #include "MK70F12.h"
-#include "interrupts.h"
 
 #define TX_ENABLE_BIT (1 << 3)
 #define RX_ENABLE_BIT (1 << 2)
@@ -18,16 +17,9 @@
 #define TX_INT_ENABLE_BIT (1 << 7)
 #define TX_INT_COMPL_ENABLE_BIT (1 << 6)
 
-#define UART2_IRQ 49
-#define UART2_NVIC_IDX NVIC_IDX(UART2_IRQ)
-#define UART2_NVIC_BIT NVIC_BIT(UART2_IRQ)
-#define UART2_NVIC_ISER NVIC_ISER_REG(NVIC_BASE_PTR, UART2_NVIC_IDX)
-
 typedef uint8_t bool;
 
 extern void uart_init(uint32_t clk_khz, uint32_t baud);
-
-extern void uart_interrupt_enable();
 
 extern bool uart_getchar(char* ch);
 

@@ -4,7 +4,6 @@
  * Edited by Stan Manilov
  */
 #include "MK70F12.h"
-#include <stdio.h>
 #include "led.h"
 #include "button.h"
 #include "uart.h"
@@ -35,7 +34,6 @@ void __init_hardware()
 	led_init();
 	btn_init();
 	uart_init(FCLK, BAUD);
-	uart_interrupt_enable();
 	btn_interrupt_enable();
 }
 

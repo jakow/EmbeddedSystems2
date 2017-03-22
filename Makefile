@@ -17,7 +17,7 @@ LDFLAGS=-proc=cortex-m4 -thumb -nostdlib $(LDSCRIPT) -g -L$(FS_PREFIX)/ARM_EABI_
 # LDFLAGS +=  -u _printf_float
 # Specify the source files to be compiled here
 BUILDDIR=build
-MAIN_SOURCES=main.c vectors.c button.c led.c uart.c dsp.c interrupts.c
+MAIN_SOURCES=main.c vectors.c button.c led.c uart.c dsp.c 
 # MAIN_OBJECTS = $(MAIN_SOURCES:.c=.o)
 MAIN_OBJECTS=$(patsubst %.c,$(BUILDDIR)/%.o,$(MAIN_SOURCES))
 
