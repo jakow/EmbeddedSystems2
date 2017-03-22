@@ -42,6 +42,13 @@ static void default_isr()
 	}
 }
 
+/*
+ * This is the global filter ID that is used to select the filter
+ */
+ #define NO_FILTER -1
+ 
+int8_t filter_id = NO_FILTER;
+
 int saturating_counter(int8_t value, int8_t increment, int8_t min, int8_t max) {
 	if (value + increment > max)
 		return max;
@@ -142,7 +149,7 @@ volatile __declspec(vectortable) vt_with_sp_t __vect_table = {
 		default_isr,     // 0x3E UART0_ERR
 		default_isr,     // 0x3F UART1_RX_TX
 		default_isr,     // 0x40 UART1_ERR
-		uart_handler,    // 0x41 UART2_RX_TX
+		default_isr,    // 0x41 UART2_RX_TX
 		default_isr,     // 0x42 UART2_ERR
 		default_isr,     // 0x43 UART3_RX_TX
 		default_isr,     // 0x44 UART3_ERR

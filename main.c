@@ -11,7 +11,6 @@
 #include "fpu.h"
 #include "dsp.h"
 #include "vectors.h"
-#include <stdbool.h>
 
 #define FCLK 50000000
 #define BAUD 115200
@@ -40,14 +39,12 @@ void __init_hardware()
 	btn_interrupt_enable();
 }
 
-int get_current_filter();
 int8_t filter(fltType*, int8_t, int8_t);
 
-
 int main() {
-	filter_id = NO_FILTER;
 	int8_t data;
 	fltType* flt = flt_create();
+	filter_id = NO_FILTER;
 	while(1) {
 		if (uart_getsigned(&data)) {
 			if (filter_id != NO_FILTER)
