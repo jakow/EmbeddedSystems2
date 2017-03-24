@@ -38,7 +38,7 @@ Lastly, to configure interrupt behaviour of the pin, Port Control Registers (PCR
 Hello world!
 
 ## FPU
-Hello world!
+For power considerations, ARM Cortex M4 disables floating point by default, so we enable coprocessors 10 and 11 which support the ARMv7-M Floating Point extension
 
 ## DSP
 
