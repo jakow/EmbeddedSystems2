@@ -484,9 +484,7 @@ pre.editor-colors .fold-marker:after {
 }
 </style>
   </head>
-  <body class='markdown-preview' data-use-github-style>
-<div style="max-width: 600px; margin: 0 auto">
-<h1 id="dsp-filtering">DSP filtering</h1>
+  <body class='markdown-preview' data-use-github-style><h1 id="dsp-filtering">DSP filtering</h1>
 <p>Welcome to the manual! This manual explains how the code works and is laid out.</p>
 <h2 id="main">Main</h2>
 <p>The <code>main.c</code> contains the <code>__init_hardware()</code> procedure that runs on reset and the following:</p>
@@ -522,6 +520,7 @@ where is a fractional <code>BRFA == BRFD/32</code>. For SCLK = 50MHz and baud = 
 <h2 id="fpu">FPU</h2>
 <p>For power considerations, ARM Cortex M4 disables floating point by default, so we enable coprocessors 10 and 11 which support the ARMv7-M Floating Point extension</p>
 <h2 id="dsp">DSP</h2>
-<p>The filter taken from Micromodeler DSP app has been changed slightly. Because the filters are all 4<sup>th</sup>-order IIR filters, the algorithm is always the same, only the coefficients change. For this reason, the <code>flt_filterBlock</code> function and <code>flt_writeInput</code> macro were modified to include a <code>flt_coefficients</code> parameter which points to the array of filter coefficients. This way, the type of filter can be changed by passing a different coefficient table to the <code>flt_filterBlock</code> function.</p></body>
-</div>
+<p>The filter taken from Micromodeler DSP app has been changed slightly. Because the filters are all 4<sup>th</sup>-order IIR filters, the algorithm is always the same, only the coefficients change. For this reason, the <code>flt_filterBlock</code> function and <code>flt_writeInput</code> macro were modified to include a <code>flt_coefficients</code> parameter which points to the array of filter coefficients. This way, the type of filter can be changed by passing a different coefficient table to the <code>flt_filterBlock</code> function.</p>
+<h1 id="output-spectrograms">Output spectrograms</h1>
+<p>The result of filtering the <code>10-4000.wav</code> files are in <code>audio/outfiles/spectrogram_flt*.png</code>.</p></body>
 </html>

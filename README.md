@@ -56,3 +56,6 @@ For power considerations, ARM Cortex M4 disables floating point by default, so w
 ## DSP
 
 The filter taken from Micromodeler DSP app has been changed slightly. Because the filters are all 4<sup>th</sup>-order IIR filters, the algorithm is always the same, only the coefficients change. For this reason, the `flt_filterBlock` function and `flt_writeInput` macro were modified to include a `flt_coefficients` parameter which points to the array of filter coefficients. This way, the type of filter can be changed by passing a different coefficient table to the `flt_filterBlock` function.
+
+# Output spectrograms
+The result of filtering the `10-4000.wav` files are in `audio/outfiles/spectrogram_flt*.png`.

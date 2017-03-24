@@ -55,7 +55,7 @@ int main() {
 		if (uart_getsigned(&data)) {
 			if (filter_id != NO_FILTER)
 				data = filter(flt, data, filter_id);
-		uart_putsigned(data);
+			uart_putsigned(data);
 		}
 	}
 	return 0;
