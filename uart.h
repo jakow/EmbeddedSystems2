@@ -19,7 +19,10 @@
 
 typedef uint8_t bool;
 
-extern void uart_init(uint32_t clk_khz, uint32_t baud);
+/**
+ *
+ */
+extern void uart_init(uint32_t clk_hz, uint32_t baud);
 
 extern bool uart_getchar(char* ch);
 

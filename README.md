@@ -35,7 +35,10 @@ Lastly, to configure interrupt behaviour of the pin, Port Control Registers (PCR
 `int btn_single_pulse(int btn_id)` a stateful function that can be used for polling for button state. When called repeatedly, it will output 1 whenever there was a falling edge detected.
 
 ## UART
-Hello world!
+The UART module
+
+
+### UART API
 
 ## FPU
 Hello world!
