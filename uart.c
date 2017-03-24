@@ -13,7 +13,7 @@ void uart_init(uint32_t clk_hz, uint32_t baud) {
 	// Enable clock for PORTE where the UART2 pins sit
 	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
 	// Enable clock for UART2
-	SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;;
+	SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
 	// set correct pin muxing
 	/* enable UART2_RX on pin PORTE16
 	 * (see page 275 of Tower manual for the pin alternatives )
