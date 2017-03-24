@@ -27,9 +27,12 @@ To enable button interrupts, the following steps are taken. First, the appropria
 Lastly, to configure interrupt behaviour of the pin, Port Control Registers (PCR) of PORTD and PORTE must be updated. The IRQC field of PCR dictates what event triggers the interrupt. In this case, it is the rising edge, which is mapped to value of `b1001` (or `0x9`) in the IRQC.
 
 
-### Button functions
-`int btn_get(int btn_id)`
-`int btn_single_pulse(int btn_id)`
+### Button API
+`BTN0` is the *up* button, `BTN1` is the *down* button. Pass the button IDs to functions below.
+
+`int btn_get(int btn_id)` get the current state of the button. 1 if button is pressed, if button released
+
+`int btn_single_pulse(int btn_id)` a stateful function that can be used for polling for button state. When called repeatedly, it will output 1 whenever there was a falling edge detected.
 
 ## UART
 Hello world!
