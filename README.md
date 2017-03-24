@@ -40,6 +40,10 @@ The UART module
 
 ### UART API
 
+`uart_getsigned(int8_t* num)` and `uart_putsigned(int8_t* num)` are the functions actually used in the code for receiving and sending signed characters. Signed integers are used instead of chars because the tests performed have shown that a plain `char` is unsigned by default, and tricky conversions are avoided this way.
+
+The other functions were used for debugging. `uart_getchar(char* ch)` and `uart_putchar(char* ch)` allow to read and write individual characters from the serial port, and `uart_read`, `uart_write`, and `uart_write_n` can be used to read and write null-terminated strings.
+
 ## FPU
 For power considerations, ARM Cortex M4 disables floating point by default, so we enable coprocessors 10 and 11 which support the ARMv7-M Floating Point extension
 

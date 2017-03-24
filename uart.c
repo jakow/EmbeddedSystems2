@@ -87,10 +87,11 @@ void uart_putsigned(int8_t num) {
 	UART2_D = num;
 }
 
-void uart_read(char* buffer, unsigned int count) {
-	while(count > 0) {
+void uart_read(char* buffer, unsigned int max_count) {
+	while(max_count > 0) {
 		while(!uart_getchar(buffer)); // wait until there is a char to be read
-		count--;
+		if(*buffer == '\0') return; // reached null
+		max_count--;
 	}
 }
 void uart_write(char *buffer) {

@@ -32,7 +32,7 @@ extern bool uart_getsigned(int8_t* num);
 
 extern void uart_putsigned(int8_t num);
 
-extern void uart_read(char* buffer, unsigned int count);
+extern void uart_read(char* buffer, unsigned int max_count);
 
 extern void uart_write(char* buffer);
 
