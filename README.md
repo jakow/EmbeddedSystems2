@@ -16,9 +16,9 @@ The `main` of the file creates a filter and then enters a loop which polls for n
 
 To use buttons, a few things had to be done. First of all, the clock gates to the button GPIO ports must be enabled. This is done by writing to `SIM_SCGC5` mask. According to docs (K70 manual page 219), this has to be done before any code that enables the gated chip functions.
 
-Then we configure button pins as GPIOs, by changing the value of Port Control Register (PCR) multiplexer bits (`PORT_PCR_MUX`). According to the Freescale Tower manual, button 0 is pin 0 on PORTD, and button 1 is pin 26 on PORTE.   
+Then button pins are configured as GPIOs, by changing the value of Port Control Register (PCR) multiplexer bits (`PORT_PCR_MUX`). According to the Freescale Tower manual, button 0 is pin 0 on PORTD, and button 1 is pin 26 on PORTE.   
 
-Finally, to set the GPIO pin direction as input, we clear the corresponding flag in PDDR (pin data direction register) of PORTD and PORTE.
+Finally, to set the GPIO pin direction as input, the corresponding flag is cleared in PDDR (pin data direction register) of PORTD and PORTE.
 ### Button interrupts
 Button interrupts are used to toggle between filters, as opposed to polling. The buttons are configured to fire interrupts when buttons are released after being pressed. Because the buttons are *active low*, this happens on the *rising edge* on the pin.
 
@@ -35,8 +35,14 @@ Lastly, to configure interrupt behaviour of the pin, Port Control Registers (PCR
 `int btn_single_pulse(int btn_id)` a stateful function that can be used for polling for button state. When called repeatedly, it will output 1 whenever there was a falling edge detected.
 
 ## UART
-The UART module
+In the Tower Module, the USB UART is UART2 on PORTE (K70 SoC has multiple UART modules that can be used simultaneously). To use UART, the UART2 module itself and pin port E must be enabled. This requires enabling the clock on PORTE on System Clock Gate Control register 5 (SCGC5) and UART2 clock on SCGC4.
 
+Next, the UART TX and RX pins (PORTE pin 16 and 17 respectively) must be configured to be used as UART. This is because the pins are multiplexed between GPIO and other functions. Out of 8 possible pin mux options, UART2 is option 3 (different for each UARTx module).
+
+Then, the proper baud rate must be configured. Before doing that, UART receiver and transmitter *must* be disabled, by writing to UART Control register 2 (`UART2_C2`). Then, the mapping between the system clock (SCLK), desired baud rate and the UART2 SBR and BRFD (for baud rate fractional divisor) register is as follows: `baud = SCLK = (SBR[12:0] + BRFA)`,
+where is a fractional `BRFA == BRFD/32`. For SCLK = 50MHz and baud = 115200 bps, SBR = 27 and BRFD = 4.
+
+After setting SBR and BRFD, transmitter and receiver can be enabled by writing to C2 register. Then UART can be used with the API described below.
 
 ### UART API
 
